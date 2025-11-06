@@ -73,6 +73,11 @@ Deletar produto criado:
 > aws dynamodb delete-item --table-name ton-marketplace-api-dev --endpoint-url http://localhost:8000 --key '{"PK": {"S": "PRODUCT#01"}, "SK": {"S": "DETAILS"}}'
 
 
+Consultar items da tabela inteira
+> aws dynamodb scan --table-name ton-marketplace-api-dev --endpoint-url http://localhost:8000
+
+
+
 ===== API ====
 Gerar senha na mão:
 > node -e "console.log(require('bcryptjs').hashSync('senha123', 10))"
