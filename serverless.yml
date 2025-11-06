@@ -1,0 +1,84 @@
+service: ton-marketplace-api
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'} # Define o ambiente (dev, hml, prod)
+
+  environment:
+    TABLE_NAME: ${self:custom.tableName}
+    JWT_SECRET: "DESAFIO_STONE"
+
+  httpApi:
+    authorizers:
+      jwtAuthorizer:
+        type: request
+        functionName: jwtAuthorizer
+        identitySource:
+          - "$request.header.Authorization" # token JWT
+        enableSimpleResponses: true # Retorna 401/403 simples
+
+plugins:
+  - serverless-plugin-typescript # Compila TS
+  - serverless-offline # Roda a API localmente
+
+package:
+  individually: true # Otimiza o tamanho de cada Lambda
+
+# Variáveis customizadas
+custom:
+  tableName: ton-marketplace-api-${self:provider.stage} # ex: ton-marketplace-api-dev
+
+# Lambdas e endpoints
+functions:
+  healthCheck:
+    handler: src/handlers/health.check # O caminho para a função (arquivo health.ts, função 'check')
+    events:
+      - httpApi:
+          path: /health
+          method: GET
+
+  authLogin:
+    handler: src/handlers/auth.login # Aponta para o arquivo 'auth.ts', função 'login'
+    events:
+      - httpApi:
+          path: /auth/login
+          method: POST
+
+  jwtAuthorizer:
+    handler: src/authorizers/jwt.handler # Aponta para o arquivo 'jwt.ts', função 'handler'
+
+  getProducts:
+    handler: src/handlers/products.list # Aponta para 'products.ts', função 'list'
+    events:
+      - httpApi:
+          path: /products
+          method: GET
+          authorizer:
+            name: jwtAuthorizer
+
+# Recursos de infra
+resources:
+  Resources:
+    # Definição da tabela DynamoDB
+    TonMarketplaceTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        BillingMode: PAY_PER_REQUEST # Custo por requisição (bom para serverless)
+
+        # Estas são as chaves da nossa Single-Table
+        # PK = Partition Key (Chave de Partição)
+        # SK = Sort Key (Chave de Ordenação)
+        AttributeDefinitions:
+          - AttributeName: PK
+            AttributeType: S # S = String
+          - AttributeName: SK
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: PK
+            KeyType: HASH # HASH = Chave de Partição
+          - AttributeName: SK
+            KeyType: RANGE # RANGE = Chave de Ordenação
