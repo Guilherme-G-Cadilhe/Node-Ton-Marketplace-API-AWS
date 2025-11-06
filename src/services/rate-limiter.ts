@@ -60,7 +60,6 @@ async function getOrCreateBucket(userId: string): Promise<TokenBucket> {
 export async function consumeToken(userId: string): Promise<void> {
   const bucket = await getOrCreateBucket(userId);
   const now = Math.floor(Date.now() / 1000);
-  console.log("bucket", bucket);
 
   // Calcular recarga
   const elapsed = now - bucket.lastRefill;
