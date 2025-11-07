@@ -2,7 +2,7 @@
 
 API robusta e escalável construída para o desafio de Software Engineer Pleno (SWE III) da Stone/Ton, focada em performance, qualidade de código e alinhamento com a arquitetura Serverless-First da Stone.
 
-O projeto implementa todos os requisitos obrigatórios e "Plus", incluindo testes de unidade, documentação OpenAPI e prova de conceito com Terraform.
+O projeto implementa todos os requisitos obrigatórios e "Plus"
 
 ## 🚀 Arquitetura da Solução (AWS Serverless)
 
