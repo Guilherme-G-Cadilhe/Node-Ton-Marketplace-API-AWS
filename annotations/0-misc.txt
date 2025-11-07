@@ -17,6 +17,12 @@ Check AWS CLi:
 Install AWS CLI:
 > https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
+Cria novo Profile com credenciais reais:
+> aws configure --profile seuProfile
+
+Deploy AWS with real credentials
+> npx serverless deploy --stage dev --aws-profile seuProfile
+
 
 ====== DYNAMO LOCAL via CLI =====
 
