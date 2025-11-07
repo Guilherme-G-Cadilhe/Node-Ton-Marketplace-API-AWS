@@ -123,7 +123,7 @@ _(Para instruções detalhadas de configuração do AWS CLI local, veja o `seeds
 
 ### Terminal 1: Iniciar o Banco de Dados (Docker)
 
-Este comando inicia um contêiner do DynamoDB Local na porta 8000. A flag `-sharedDb` é essencial para o funcionamento correto com o AWS CLI.
+Este comando inicia um contêiner do DynamoDB Local na porta 8000. A flag `-sharedDb` é essencial para o funcionamento correto com o AWS CLI. <br>
 (Obs: A Flag `-inMemory` para o conteúdo ficar apenas em memoria está ativa)
 
 ```bash
@@ -211,8 +211,8 @@ Este desafio foi uma imersão que me permitiu não só aprender, mas reforçar c
 1.  **Serverless & Lambdas:**
     - Aprendi que Lambdas são focadas em _eventos_ e _funções_, não em _servidores_. Que exigem uma arquitetura diferente, onde o estado é gerenciado externamente (ex: DynamoDB).
 
-2.  **Reforço em TypeScript e Testes**
-    Embora eu já usasse TypeScript e Testes, este projeto foi uma oportunidade de reforço para aplicar tipos de forma mais estrita, criar schemas de validação robustos com Zod e estruturar melhor mocks e testes unitários com 100% de cobertura nos serviços, usando mocks do aws-sdk-client-mock.
+2.  **Reforço em TypeScript e Testes:**
+    - Embora eu já usasse TypeScript e Testes, este projeto foi uma oportunidade de reforço para aplicar tipos de forma mais estrita, criar schemas de validação robustos com Zod e estruturar melhor mocks e testes unitários com 100% de cobertura nos serviços, usando mocks do aws-sdk-client-mock.
 
 3.  **Modelagem NoSQL (DynamoDB Single-Table Design):**
     - A maior mudança de paradigma foi sair da modelagem relacional ou de documentos do MongoDB para o Single-Table Design do DynamoDB.
