@@ -6,12 +6,63 @@ O projeto implementa todos os requisitos obrigatórios e "Plus", incluindo teste
 
 ## 🚀 Arquitetura da Solução (AWS Serverless)
 
-A arquitetura é 100% Serverless, otimizada para performance e custo zero (Free Tier).
+A arquitetura é 100% Serverless, otimizada para performance, custo (Free Tier) e alinhada com a stack principal da Stone.
 
-- **API Gateway (HTTP API):** Gerencia os endpoints e o tráfego.
+```text
+                                    ┌──────────────────────────┐
+                                    │        Cliente           │
+                                    │ (Front-end / Postman)    │
+                                    └────────────┬─────────────┘
+                                                 │
+                                                 ▼
+                                    ┌──────────────────────────┐
+                                    │    API Gateway (HTTP)    │
+                                    │ - /auth/login (POST)     │
+                                    │ - /products (GET)        │
+                                    └────────────┬─────────────┘
+                                                 │
+                              Valida JWT via     │
+                              Custom Authorizer  │
+                                                 ▼
+                                  ┌────────────────────────┐
+                                  │   jwtAuthorizer        │
+                                  │ (Lambda Authorizer)    │
+                                  └────────────┬───────────┘
+                                               │
+                        ┌──────────────────────┼──────────────────────┐
+                        │                      │                      │
+                        ▼                      ▼                      ▼
+            ┌──────────────────┐     ┌────────────────────────────────────┐
+            │  authLogin        │     │  getProducts                      │
+            │  (Lambda)         │     │  (Lambda)                         │
+            │------------------│     │------------------------------------│
+            │ - Autentica user │     │ - Valida JWT (via Authorizer)     │
+            │ - Gera JWT       │     │ - Executa Rate Limiter interno    │
+            │                  │     │ - Consulta produtos no DynamoDB   │
+            └────────┬─────────┘     └──────────────┬────────────────────┘
+                     │                              │
+                     └──────────────┬───────────────┘
+                                    ▼
+                             ┌────────────────────────────┐
+                             │        DynamoDB            │
+                             │ (Single-Table: Users,      │
+                             │  Products, RateLimiter)    │
+                             └────────────────────────────┘
+                                               │
+                                               ▼
+                                   ┌────────────────────────┐
+                                   │     CloudWatch Logs    │
+                                   │ (Monitoring & Métricas)│
+                                   └────────────────────────┘
+
+
+```
+
+- **API Gateway (HTTP API):** Gerencia os endpoints, rotas e CORS.
 - **AWS Lambda (Node.js 20.x):** Executa a lógica de negócio (stateless).
-- **DynamoDB (Single-Table):** Banco de dados NoSQL performático para persistência.
-- **Custom Authorizer:** Uma Lambda dedicada que valida tokens JWT, protegendo as rotas privadas.
+- **DynamoDB (Single-Table):** Banco de dados NoSQL performático para persistência de Usuários, Produtos e estado do Rate Limiter.
+- **Custom Authorizer:** Uma Lambda dedicada que valida tokens JWT, protegendo as rotas privadas de forma centralizada.
+- **CloudWatch:** Coleta logs de todas as Lambdas, essencial para o troubleshooting
 
 ## ✨ Features Implementadas
 
@@ -23,6 +74,36 @@ A arquitetura é 100% Serverless, otimizada para performance e custo zero (Free 
 - [x] **Qualidade de Código:** Configurado com ESLint, Prettier e Commits Semânticos (commitzen).
 - [x] **Documentação de API:** Arquivo `openapi.json` gerado automaticamente (veja como rodar abaixo).
 - [x] **Documentação de Arquitetura (ADRs):** Decisões de design documentadas em `docs/adrs/`.
+
+---
+
+## 📁 Estrutura do Projeto
+
+A estrutura do projeto segue princípios de SOLID e separação de responsabilidades (SoC), facilitando manutenção, escalabilidade e testes.
+
+```text
+ton-marketplace-api/
+├── docs/
+│   └── adrs/                 # Decisões de arquitetura (ADRs)
+├── seeds/                    # Scripts para popular o banco
+├── src/
+│   ├── authorizers/          # Lambdas de autorização (JWT)
+│   ├── config/               # Configuração de clientes (DynamoDB)
+│   ├── handlers/             # Camada HTTP (Request/Response)
+│   ├── models/               # Tipos e interfaces (Entities)
+│   ├── repositories/         # Camada de acesso a dados (Data Access)
+│   ├── schemas/              # Validação de entrada (Zod)
+│   └── services/             # Lógica de negócio (Business Logic)
+├── tests/
+│   └── unit/                 # Testes unitários da camada de serviços
+├── .gitignore
+├── eslint.config.js          # Regras de lint
+├── jest.config.js            # Configuração do Jest
+├── openapi.json              # Documentação da API
+├── package.json
+├── serverless.yml            # Definição da infraestrutura (IaC)
+└── tsconfig.json
+```
 
 ---
 
@@ -122,3 +203,22 @@ Este projeto foi gerenciado profissionalmente usando o GitHub, Para dar visibili
 - **Issues:** Cada feature ou bug foi rastreado em uma Issue.
 - **Commits Semânticos:** Os commits seguem o padrão `feat:`, `fix`:, `docs:`, `test:`, etc., usando `npm run commit` (commitzen).
 - **Pull Requests (PRs):** Todo código foi mesclado via PRs, preparando para a automação de CI/CD.
+
+## 📚 Minha Jornada de Aprendizado no Desafio
+
+Este desafio foi uma imersão que me permitiu não só aprender, mas reforçar conceitos fundamentais da stack Serverless da AWS, alinhado à cultura da Stone.
+
+1.  **Serverless & Lambdas:**
+    - Aprendi que Lambdas são focadas em _eventos_ e _funções_, não em _servidores_. Que exigem uma arquitetura diferente, onde o estado é gerenciado externamente (ex: DynamoDB).
+
+2.  **Reforço em TypeScript e Testes**
+    Embora eu já usasse TypeScript e Testes, este projeto foi uma oportunidade de reforço para aplicar tipos de forma mais estrita, criar schemas de validação robustos com Zod e estruturar melhor mocks e testes unitários com 100% de cobertura nos serviços, usando mocks do aws-sdk-client-mock.
+
+3.  **Modelagem NoSQL (DynamoDB Single-Table Design):**
+    - A maior mudança de paradigma foi sair da modelagem relacional ou de documentos do MongoDB para o Single-Table Design do DynamoDB.
+    - Aprendi a focar em "Padrões de Acesso" antes de escrever qualquer código. Usar chaves compostas (PK/SK) como `USER#email` e `PRODUCTS` foi uma virada de chave para permitir buscas diretas (Query) em vez de varrer a tabela inteira (Scan), o que entendi ser um anti-padrão de performance.
+
+4.  **IAM e CloudWatch:**
+    - O ponto de inflexão do projeto foi o deploy. Localmente, tudo funcionava, mas na AWS recebi um `500 Internal Server Error`.
+    - O aprendizado real foi mergulhar no CloudWatch e encontrar o log da `AccessDeniedException`. Ali entendi a diferença crucial entre as credenciais do meu usuário (que o CLI usa) e a Role de Execução (que a Lambda assume na nuvem).
+    - Resolver isso diretamente no `serverless.yml` conectou os pontos de como a Infraestrutura como Código (IaC) gerencia permissões de forma declarativa.
