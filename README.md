@@ -74,6 +74,12 @@ A arquitetura é 100% Serverless, otimizada para performance, custo (Free Tier) 
 - [x] **Qualidade de Código:** Configurado com ESLint, Prettier e Commits Semânticos (commitzen).
 - [x] **Documentação de API:** Arquivo `openapi.json` gerado automaticamente (veja como rodar abaixo).
 - [x] **Documentação de Arquitetura (ADRs):** Decisões de design documentadas em `docs/adrs/`.
+- [x] **CI/CD com GitHub Actions:** Workflows automatizados (em `.github/workflows/`) para rodar Lint, Formatação, Testes e Verificação de Commits em todo Pull Request, garantindo a qualidade e estabilidade da `main`.
+- [x] **Infra as Code (IaC) Dupla:** Uso do **Serverless Framework** para deploy rápido de Lambdas/API e **Terraform** (na pasta `/terraform`) como "prova de conceito" para gerenciar a infraestrutura base (DynamoDB), atendendo aos "Plus" do desafio.
+- [x] **Validação Robusta com Zod:** Validação de schema em _runtime_ que garante que nenhum dado mal formatado (ex: email inválido, senha curta) chegue à camada de serviço.
+- [x] **Bundling Otimizado (esbuild):** Uso do `serverless-esbuild` para tree-shaking e bundling, resultando em pacotes de deploy minúsculos (ex: 352kB), cold starts mais rápidos e correção de bugs de deploy (como `EMFILE`).
+- [x] **Tratamento de Erro Explícito:** Classes de erro customizadas (ex: `AuthError`, `RateLimitError`) e handlers que retornam os status codes HTTP corretos (400, 401, 429, 503), melhorando a experiência do cliente.
+- [x] **Ambiente de Dev Completo:** Configuração 100% local com `serverless offline` + DynamoDB (Docker) e scripts de _seed_ para popular o banco, provendo uma excelente Developer Experience (DevEx).
 
 ---
 
@@ -104,6 +110,56 @@ ton-marketplace-api/
 ├── serverless.yml            # Definição da infraestrutura (IaC)
 └── tsconfig.json
 ```
+
+---
+
+## 📖 Documentação da API (OpenAPI)
+
+A API está documentada usando a especificação OpenAPI 3.0.
+
+- **Arquivo Fonte:** `openapi.json`
+- **Visualizador Interativo:** **[Clique aqui para ver a Documentação da API (Swagger UI)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-Stone/main/openapi.json)**
+
+---
+
+## 🧪 Testando a API na AWS (Produção)
+
+A API foi deployada na AWS e está disponível nos seguintes endpoints:
+
+- **GET `/health`**: `https://vwnbt8pifi.execute-api.us-east-1.amazonaws.com/health`
+- **POST `/auth/login`**: `https://vwnbt8pifi.execute-api.us-east-1.amazonaws.com/auth/login`
+- **GET `/products`**: `https://vwnbt8pifi.execute-api.us-east-1.amazonaws.com/products`
+
+### Como Testar (Fluxo Rápido)
+
+1.  **Faça Login (POST):**
+    Envie um `POST` para `.../auth/login` com o body:
+
+    ```json
+    {
+      "email": "teste@ton.com",
+      "password": "senha123"
+    }
+    ```
+
+2.  **Copie o Token:**
+    Você receberá uma resposta com o token JWT:
+
+    ```json
+    {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
+      "expiresIn": 3600
+    }
+    ```
+
+3.  **Liste os Produtos (GET):**
+    Faça um `GET` para `.../products` e adicione o token no header `Authorization`:
+    - **Header:** `Authorization`
+    - **Value:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6...`
+
+4.  **(Opcional) Teste a Paginação:**
+    Na resposta de `/products`, defina um `limit` pegue o `nextCursor` e o envie como query param na próxima requisição:
+    - `GET .../products?limit=1&cursor=eyJQSyI6IlBST...`
 
 ---
 
@@ -162,6 +218,17 @@ chmod +x seeds/bash-seed-dynamodb.sh
 # Execute o script
 ./seeds/bash-seed-dynamodb.sh
 ```
+
+### 🏛️ Nota sobre IaC: Serverless Framework vs. Terraform
+
+Este projeto usa duas formas de IaC para propósitos diferentes, demonstrando uma arquitetura híbrida realista:
+
+1.  **Serverless Framework (`serverless.yml`):** Usado para o deploy da "aplicação" (Lambdas, API Gateway, Authorizer, Roles IAM). É ideal para a alta produtividade no ciclo de vida da aplicação.
+2.  **Terraform (`/terraform`):** Fornecido como "prova de conceito" (um "Plus" do desafio) para gerenciar a infraestrutura "base" ou "agnóstica" (como a tabela DynamoDB). Em um time maior, a tabela seria criada pelo Terraform, e as Lambdas (via Serverless Framework) apenas receberiam o nome da tabela (`TABLE_NAME`) como variável de ambiente.
+
+O Terraform neste projeto **não** quebra o deploy do Serverless, pois é demonstrativo e gerenciaria recursos diferentes.
+
+---
 
 ## 🚀 Testes e Qualidade
 
