@@ -39,7 +39,7 @@ async function clearTable() {
     new ScanCommand({
       TableName: process.env.TABLE_NAME,
       ProjectionExpression: "PK, SK",
-    }),
+    })
   );
 
   if (scan.Items) {
@@ -48,7 +48,7 @@ async function clearTable() {
         new DeleteCommand({
           TableName: process.env.TABLE_NAME,
           Key: { PK: item.PK, SK: item.SK },
-        }),
+        })
       );
     }
   }
@@ -63,7 +63,7 @@ async function seedTable() {
       new PutCommand({
         TableName: process.env.TABLE_NAME,
         Item: product,
-      }),
+      })
     );
   }
 }
@@ -78,7 +78,7 @@ describe("ProductService (Integration)", () => {
       await seedTable();
     } catch (e) {
       console.error(
-        "ERRO: O DynamoDB Local (Docker) não parece estar rodando.",
+        "ERRO: O DynamoDB Local (Docker) não parece estar rodando."
       );
       throw e;
     }
