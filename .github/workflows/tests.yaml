@@ -41,4 +41,4 @@ jobs:
         # 3. Cria a tabela
         # 4. Roda os testes
         # 5. Derruba o Docker
-        run: npm test:ci
+        run: npm run test:ci
