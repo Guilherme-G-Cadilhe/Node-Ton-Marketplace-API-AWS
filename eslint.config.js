@@ -4,7 +4,7 @@ const globals = require('globals');
 
 module.exports = [
   {
-    ignores: ['.build/', 'node_modules/', 'coverage/', 'dist/'],
+    ignores: ['.build/', 'node_modules/', 'coverage/', 'dist/', '.esbuild/'],
   },
 
   ...tseslint.configs.recommended,

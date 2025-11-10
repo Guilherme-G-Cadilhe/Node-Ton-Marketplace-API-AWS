@@ -1,4 +1,5 @@
 .build
+.esbuild
 # Logs
 logs
 *.log

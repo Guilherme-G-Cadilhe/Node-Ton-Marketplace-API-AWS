@@ -1,0 +1,7 @@
+# Este arquivo define o serviço do DynamoDB Local
+services:
+  dynamo:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000" # Mapeia a porta do container para o localhost
+    command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
