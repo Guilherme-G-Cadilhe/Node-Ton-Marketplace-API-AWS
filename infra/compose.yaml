@@ -1,5 +1,4 @@
 # Este arquivo define o serviço do DynamoDB Local
-version: "3.8"
 services:
   dynamo:
     image: amazon/dynamodb-local:latest
