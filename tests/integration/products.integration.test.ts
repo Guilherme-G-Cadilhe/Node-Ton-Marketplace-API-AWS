@@ -42,7 +42,7 @@ async function clearTable() {
     })
   );
 
-  if (scan.Items) {
+  if (scan.Items && scan.Items.length > 0) {
     for (const item of scan.Items) {
       await docClient.send(
         new DeleteCommand({
