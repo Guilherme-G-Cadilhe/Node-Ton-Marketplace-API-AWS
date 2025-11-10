@@ -343,3 +343,11 @@ Este desafio foi uma imersão que me permitiu não só aprender, mas reforçar c
     - O ponto de inflexão do projeto foi o deploy. Localmente, tudo funcionava, mas na AWS recebi um `500 Internal Server Error`.
     - Um dos aprendizados foi mergulhar no CloudWatch e encontrar o log da `AccessDeniedException`. Ali entendi a diferença crucial entre as credenciais do meu usuário (que o CLI usa) e a Role de Execução (que a Lambda assume na nuvem).
     - Resolver isso diretamente no `serverless.yml` conectou os pontos de como a Infraestrutura como Código (IaC) gerencia permissões de forma declarativa.
+    
+## 🛣️ Possíveis Melhorias
+
+Dado que este foi meu primeiro contato profundo com o ecossistema Serverless da AWS, se eu tivesse mais uma semana, estes seriam meus próximos focos:
+
+1.  **Melhoria na Busca (Feature Futura):** Para uma busca por *nome* de produto, eu aprendi que usar o DynamoDB direto (com `Scan`) não é o ideal. Meu próximo passo seria pesquisar qual é a solução padrão da AWS para buscas. Eu sei que envolve conectar os "Streams" do DynamoDB a um serviço de busca separado, como o OpenSearch, mas eu precisaria de mais tempo para estudar e implementar essa integração corretamente.
+
+2.  **Otimização do Rate Limit:** Meu Rate Limit usa o DynamoDB para persistir os tokens. Para altíssima performance, eu pesquisaria como mover essa lógica para um serviço de cache em memória, como o Redis (que na AWS se chama ElastiCache).
