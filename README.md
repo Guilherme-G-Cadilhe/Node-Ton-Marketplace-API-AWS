@@ -9,13 +9,13 @@
 
 # Desafio de Backend: Ton Marketplace API
 
-API robusta e escalável construída para o desafio da Stone/Ton, focada em performance, qualidade de código e alinhamento com a arquitetura Serverless-First da Stone.
+API robusta e escalável para um desafio de 1 semana, focada em performance, qualidade de código e alinhamento com a arquitetura Serverless-First.
 
 O projeto implementa requisitos obrigatórios e "Plus"
 
 ## 🚀 Arquitetura da Solução (AWS Serverless)
 
-A arquitetura é 100% Serverless, otimizada para performance, custo (Free Tier) e alinhada com a stack principal da Stone.
+A arquitetura é 100% Serverless, otimizada para performance, custo (Free Tier).
 
 ```text
                                     ┌──────────────────────────┐
@@ -245,7 +245,7 @@ O Terraform neste projeto **não** quebra o deploy do Serverless, pois é demons
 
 ---
 
-## ☁️ Deploy na AWS (Instruções para Avaliador)
+## ☁️ Deploy na AWS
 
 O projeto está 100% configurado para deploy na AWS. O `serverless.yml` na `main` está com as permissões IAM comentadas para garantir que o `serverless offline` funcione sem credenciais.
 
@@ -327,7 +327,7 @@ Este projeto foi gerenciado profissionalmente usando o GitHub, Para dar visibili
 
 ## 📚 Minha Jornada de Aprendizado no Desafio
 
-Este desafio foi uma imersão que me permitiu não só aprender, mas reforçar conceitos fundamentais da stack Serverless da AWS, alinhado à cultura da Stone.
+Este desafio foi uma imersão que me permitiu não só aprender, mas reforçar conceitos fundamentais da stack Serverless da AWS.
 
 1.  **Serverless & Lambdas:**
     - Aprendi que Lambdas são focadas em _eventos_ e _funções_, não em _servidores_. Que exigem uma arquitetura diferente, onde o estado é gerenciado externamente (ex: DynamoDB).
