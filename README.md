@@ -1,9 +1,9 @@
 <p align="center">
-  <a href="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-Stone/actions/workflows/tests.yaml">
-    <img src="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-Stone/actions/workflows/tests.yaml/badge.svg" alt="Automated Tests Status" />
+  <a href="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-AWS/actions/workflows/tests.yaml">
+    <img src="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-AWS/actions/workflows/tests.yaml/badge.svg" alt="Automated Tests Status" />
   </a>
-  <a href="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-Stone/actions/workflows/linting.yaml">
-    <img src="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-Stone/actions/workflows/linting.yaml/badge.svg" alt="Automated Linting Status" />
+  <a href="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-AWS/actions/workflows/linting.yaml">
+    <img src="https://github.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-AWS/actions/workflows/linting.yaml/badge.svg" alt="Automated Linting Status" />
   </a>
 </p>
 
@@ -131,7 +131,7 @@ ton-marketplace-api/
 A API está documentada usando a especificação OpenAPI 3.0.
 
 - **Arquivo Fonte:** `openapi.json`
-- **Visualizador Interativo:** **[Clique aqui para ver a Documentação da API (Swagger UI)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-Stone/main/openapi.json)**
+- **Visualizador Interativo:** **[Clique aqui para ver a Documentação da API (Swagger UI)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Guilherme-G-Cadilhe/Node-Ton-Marketplace-API-AWS/main/openapi.json)**
 
 ---
 
