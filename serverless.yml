@@ -12,7 +12,7 @@ provider:
 
   environment:
     TABLE_NAME: ${self:custom.tableName}
-    JWT_SECRET: "DESAFIO_STONE"
+    JWT_SECRET: "DESAFIO"
 
   # -----------------------------------------------------------------
   # ⬇️ PERMISSÕES PARA DEPLOY NA AWS ⬇️
@@ -68,7 +68,7 @@ custom:
   documentation:
     version: "1.0.0"
     title: "Ton Marketplace API"
-    description: "API para o desafio SWE da Stone (Ton/Renda Extra)"
+    description: "API para o desafio"
     models:
       - name: "ErrorResponse"
         description: "Resposta de erro padrão"
